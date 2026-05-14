@@ -1,0 +1,2466 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WALLVAULT — Premium Wallpapers</title>
+  <!-- Google Fonts: Syne (display) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <style>
+/* ============================================================
+   WALLVAULT — style.css
+   Premium Wallpaper Web App
+   ============================================================ */
+
+/* ── CSS Variables ── */
+:root {
+  /* Core palette — dark */
+  --bg-base:       #07080d;
+  --bg-surface:    #0e0f18;
+  --bg-elevated:   #14162a;
+  --border:        rgba(255,255,255,0.07);
+  --border-glow:   rgba(99,102,241,0.35);
+  --text-primary:  #f0f1ff;
+  --text-secondary:#9495b0;
+  --text-muted:    #4a4b68;
+
+  /* Accent colors */
+  --accent:        #6366f1;
+  --accent-2:      #a855f7;
+  --accent-cyan:   #06b6d4;
+  --accent-pink:   #ec4899;
+  --danger:        #ef4444;
+  --success:       #22c55e;
+
+  /* Gradients */
+  --grad-main:  linear-gradient(135deg, var(--accent), var(--accent-2));
+  --grad-text:  linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+
+  /* Glass */
+  --glass-bg:     rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.09);
+
+  /* Spacing & radius */
+  --radius-sm: 8px;
+  --radius:    14px;
+  --radius-lg: 22px;
+  --radius-xl: 32px;
+
+  /* Shadows */
+  --shadow-card:  0 4px 32px rgba(0,0,0,0.45);
+  --shadow-glow:  0 0 40px rgba(99,102,241,0.25);
+  --shadow-fab:   0 8px 30px rgba(99,102,241,0.45);
+
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur:  0.25s;
+
+  /* Navbar height */
+  --nav-h: 68px;
+}
+
+/* ── Light theme overrides ── */
+[data-theme="light"] {
+  --bg-base:        #f3f4ff;
+  --bg-surface:     #ffffff;
+  --bg-elevated:    #ececf8;
+  --border:         rgba(0,0,0,0.07);
+  --border-glow:    rgba(99,102,241,0.25);
+  --text-primary:   #0f1023;
+  --text-secondary: #525575;
+  --text-muted:     #b0b2cc;
+  --glass-bg:       rgba(255,255,255,0.55);
+  --glass-border:   rgba(99,102,241,0.12);
+  --shadow-card:    0 4px 32px rgba(0,0,0,0.1);
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-h);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 99px;
+}
+
+/* ── Typography ── */
+h1, h2, h3, h4 { font-family: 'Syne', sans-serif; }
+
+.gradient-text {
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.accent { color: var(--accent); }
+.accent-link { color: var(--accent); cursor: pointer; }
+.accent-link:hover { text-decoration: underline; }
+
+.hidden { display: none !important; }
+
+/* ── Utility: Glass card ── */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: var(--grad-main);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
+}
+.btn-primary.large { padding: 14px 32px; font-size: 1rem; }
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.btn-outline:hover {
+  background: var(--glass-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.btn-ghost:hover { background: var(--glass-bg); color: var(--text-primary); }
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all var(--dur) var(--ease);
+  position: relative;
+}
+.icon-btn:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-glow);
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 99px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(16px, 4vw, 48px);
+  background: rgba(7,8,13,0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--dur) var(--ease);
+}
+[data-theme="light"] .navbar { background: rgba(243,244,255,0.75); }
+
+.navbar.scrolled { border-bottom-color: var(--border-glow); }
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--grad-main);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #fff;
+}
+.logo-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: color var(--dur) var(--ease);
+}
+.nav-links a:hover { color: var(--text-primary); }
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hamburger { display: none; }
+
+/* Mobile nav */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    padding: 20px 24px 28px;
+    gap: 20px;
+    z-index: 99;
+  }
+  .nav-links.open { display: flex; }
+  .hamburger { display: inline-flex; }
+  .btn-primary span { display: none; }
+}
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-h) + 60px) clamp(16px, 5vw, 80px) 60px;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Animated gradient orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.28;
+  animation: drift 12s ease-in-out infinite alternate;
+}
+.orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--accent), transparent 70%);
+  top: -200px; left: -150px;
+  animation-delay: 0s;
+}
+.orb-2 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, var(--accent-2), transparent 70%);
+  bottom: -100px; right: -100px;
+  animation-delay: -5s;
+}
+.orb-3 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, var(--accent-cyan), transparent 70%);
+  top: 40%; left: 55%;
+  animation-delay: -8s;
+  opacity: 0.15;
+}
+
+/* Grain noise overlay */
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px;
+  pointer-events: none;
+}
+
+@keyframes drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 40px) scale(1.12); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 780px;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  backdrop-filter: blur(12px);
+  animation: fadeUp 0.6s var(--ease) both;
+}
+
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.12;
+  margin-bottom: 22px;
+  animation: fadeUp 0.6s 0.1s var(--ease) both;
+}
+
+.hero-subtitle {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto 36px;
+  line-height: 1.75;
+  animation: fadeUp 0.6s 0.2s var(--ease) both;
+}
+
+/* Search bar */
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto 22px;
+  animation: fadeUp 0.6s 0.3s var(--ease) both;
+}
+.search-icon {
+  position: absolute;
+  left: 18px;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+.search-wrapper input {
+  flex: 1;
+  padding: 15px 18px 15px 48px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  backdrop-filter: blur(12px);
+  transition: border-color var(--dur) var(--ease);
+}
+.search-wrapper input:focus { border-color: var(--accent); }
+.search-wrapper input::placeholder { color: var(--text-muted); }
+
+.search-btn {
+  padding: 15px 26px;
+  background: var(--grad-main);
+  color: #fff;
+  border: none;
+  border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--dur) var(--ease);
+  white-space: nowrap;
+}
+.search-btn:hover { opacity: 0.85; }
+
+/* Trending tags */
+.trending-tags {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  animation: fadeUp 0.6s 0.4s var(--ease) both;
+}
+.tag-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.tag {
+  padding: 5px 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 99px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.tag:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* Hero stats */
+.hero-stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-top: 60px;
+  padding: 20px 40px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(16px);
+  animation: fadeUp 0.6s 0.5s var(--ease) both;
+}
+.stat { text-align: center; }
+.stat-num {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+.stat-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+}
+
+@media (max-width: 520px) {
+  .hero-stats { gap: 18px; padding: 16px 22px; }
+  .stat-num { font-size: 1.3rem; }
+}
+
+/* ============================================================
+   SECTION SHARED STYLES
+   ============================================================ */
+section {
+  padding: clamp(60px, 8vw, 110px) clamp(16px, 5vw, 80px);
+}
+
+.section-header {
+  margin-bottom: 44px;
+  text-align: center;
+}
+.section-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   CATEGORIES SECTION
+   ============================================================ */
+.categories-section { background: var(--bg-surface); }
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.category-card {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.category-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--shadow-glow);
+}
+.category-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease);
+}
+.category-card:hover img { transform: scale(1.08); }
+
+.category-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px;
+}
+.category-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+}
+.category-count {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.6);
+}
+
+/* ============================================================
+   GALLERY / FILTER BAR
+   ============================================================ */
+.gallery-section { background: var(--bg-base); }
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-tab {
+  padding: 7px 18px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 99px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.filter-tab.active,
+.filter-tab:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.sort-select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.sort-select-wrapper select {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  padding: 7px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+
+/* ── Wallpaper Grid ── */
+.wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ── Wallpaper Card ── */
+.wallpaper-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  animation: fadeIn 0.4s var(--ease) both;
+}
+.wallpaper-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card), var(--shadow-glow);
+}
+
+.card-image-wrap {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.card-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease);
+}
+.wallpaper-card:hover .card-image-wrap img { transform: scale(1.06); }
+
+/* Hover overlay */
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6));
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.wallpaper-card:hover .card-overlay { opacity: 1; }
+
+.overlay-btn {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s var(--ease);
+  backdrop-filter: blur(8px);
+}
+.overlay-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+.overlay-btn.liked { background: var(--accent-pink); border-color: var(--accent-pink); }
+
+/* Category badge on card */
+.card-cat-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 10px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #fff;
+  backdrop-filter: blur(8px);
+  letter-spacing: 0.03em;
+}
+
+/* Card body */
+.card-body {
+  padding: 14px 16px;
+}
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-likes {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.card-likes i { font-size: 0.85rem; color: var(--accent-pink); }
+.card-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-action-btn {
+  width: 28px; height: 28px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s var(--ease);
+}
+.card-action-btn:hover { color: var(--text-primary); background: var(--bg-elevated); }
+.card-action-btn.del:hover { color: var(--danger); border-color: var(--danger); }
+
+/* ── Skeleton loader ── */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-lg);
+}
+.skeleton-card {
+  height: 240px;
+  border-radius: var(--radius-lg);
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── No results ── */
+.no-results {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-muted);
+}
+.no-results i { font-size: 3rem; margin-bottom: 14px; display: block; }
+.no-results p { font-size: 1rem; }
+
+.load-more-wrapper {
+  text-align: center;
+  margin-top: 48px;
+}
+
+/* ============================================================
+   ABOUT SECTION
+   ============================================================ */
+.about-section {
+  position: relative;
+  background: var(--bg-surface);
+  text-align: center;
+  overflow: hidden;
+}
+.about-orb {
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-2), transparent 70%);
+  filter: blur(110px);
+  opacity: 0.18;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.about-content {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  margin: 0 auto;
+}
+.about-body {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin: 20px 0 36px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  padding: 0 clamp(16px, 5vw, 80px);
+}
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border);
+}
+.footer-brand {
+  flex: 1;
+  min-width: 200px;
+}
+.footer-brand p {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  max-width: 220px;
+  line-height: 1.6;
+}
+.footer-links {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-col h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.footer-col a {
+  text-decoration: none;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  transition: color var(--dur) var(--ease);
+}
+.footer-col a:hover { color: var(--accent); }
+
+.footer-social h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.social-icons {
+  display: flex;
+  gap: 10px;
+}
+.social-icon {
+  width: 38px; height: 38px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all var(--dur) var(--ease);
+}
+.social-icon:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.footer-bottom {
+  padding: 20px 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ============================================================
+   FLOATING ACTION BUTTON
+   ============================================================ */
+.fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 56px;
+  height: 56px;
+  background: var(--grad-main);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 90;
+  box-shadow: var(--shadow-fab);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.fab:hover {
+  transform: scale(1.1) rotate(45deg);
+  box-shadow: 0 12px 40px rgba(99,102,241,0.6);
+}
+
+/* ============================================================
+   UPLOAD / EDIT MODAL
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s var(--ease);
+}
+
+.modal {
+  width: 100%;
+  max-width: 520px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  animation: slideUp 0.3s var(--ease);
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-header h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.modal-body { padding: 24px; display: flex; flex-direction: column; gap: 18px; }
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 18px 24px;
+  border-top: 1px solid var(--border);
+}
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed var(--border-glow);
+  border-radius: var(--radius-lg);
+  padding: 36px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  position: relative;
+}
+.upload-zone:hover { border-color: var(--accent); background: rgba(99,102,241,0.04); }
+.upload-zone i { font-size: 2.4rem; color: var(--accent); margin-bottom: 10px; display: block; }
+.upload-zone p { font-size: 0.88rem; color: var(--text-secondary); }
+
+.upload-preview {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.upload-preview img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.remove-preview {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Form group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.form-group label span { color: var(--accent); }
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color var(--dur) var(--ease);
+}
+.form-group input:focus,
+.form-group select:focus { border-color: var(--accent); }
+.form-group input::placeholder { color: var(--text-muted); }
+
+/* ============================================================
+   PREVIEW MODAL
+   ============================================================ */
+.preview-modal {
+  width: 100%;
+  max-width: 900px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  animation: slideUp 0.3s var(--ease);
+  position: relative;
+}
+.preview-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  z-index: 10;
+  background: rgba(0,0,0,0.5) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+.preview-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px; height: 40px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  backdrop-filter: blur(8px);
+}
+.prev-btn { left: 14px; }
+.next-btn { right: 14px; }
+.preview-nav:hover { background: var(--accent); }
+
+.preview-image-wrap {
+  position: relative;
+  width: 100%;
+  background: #000;
+  max-height: 60vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.preview-image-wrap img {
+  width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}
+.preview-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-base);
+}
+.preview-loader span {
+  width: 36px; height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.preview-info { padding: 18px 22px; }
+.preview-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.preview-meta h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.preview-cat-badge {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 3px 12px;
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.3);
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.preview-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.like-btn-preview { width: 40px; height: 40px; font-size: 1rem; color: var(--text-secondary) !important; }
+.like-btn-preview.liked { color: var(--accent-pink) !important; }
+.preview-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.preview-tag {
+  padding: 3px 10px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 99px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   FAVORITES DRAWER
+   ============================================================ */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 150;
+  animation: fadeIn 0.2s var(--ease);
+}
+.favorites-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 340px;
+  max-width: 100vw;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border);
+  z-index: 151;
+  display: flex;
+  flex-direction: column;
+  animation: slideRight 0.3s var(--ease);
+}
+@keyframes slideRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.drawer-header h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-pink);
+}
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.fav-item:hover { border-color: var(--accent); }
+.fav-item img {
+  width: 58px; height: 40px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.fav-item-info { flex: 1; min-width: 0; }
+.fav-item-title {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fav-item-cat {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.fav-remove {
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color var(--dur) var(--ease);
+  background: none;
+  border: none;
+}
+.fav-remove:hover { color: var(--danger); }
+.fav-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 40px 20px;
+  font-size: 0.88rem;
+}
+.fav-empty i { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+
+/* ============================================================
+   TOAST NOTIFICATIONS
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 0.87rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-card);
+  animation: toastIn 0.3s var(--ease), toastOut 0.3s 2.5s var(--ease) forwards;
+  backdrop-filter: blur(16px);
+  white-space: nowrap;
+}
+.toast.success { border-color: var(--success); }
+.toast.success i { color: var(--success); }
+.toast.error { border-color: var(--danger); }
+.toast.error i { color: var(--danger); }
+.toast.info { border-color: var(--accent); }
+.toast.info i { color: var(--accent); }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes toastOut {
+  to { opacity: 0; transform: translateY(12px); }
+}
+
+/* ============================================================
+   KEYFRAME ANIMATIONS
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   RESPONSIVE TWEAKS
+   ============================================================ */
+@media (max-width: 640px) {
+  .filter-bar { flex-direction: column; align-items: flex-start; }
+  .wallpaper-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .categories-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .search-wrapper { flex-direction: column; }
+  .search-wrapper input { border-radius: var(--radius-xl); }
+  .search-btn { border-radius: var(--radius-xl); width: 100%; }
+  .hero-stats { flex-direction: column; gap: 12px; }
+  .stat-divider { width: 40px; height: 1px; }
+  .footer-top { flex-direction: column; gap: 28px; }
+  .preview-modal { border-radius: var(--radius-lg); }
+}
+
+</style>
+</head>
+<body>
+
+  <!-- ==============================
+       NAVBAR
+  ============================== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <span class="logo-icon"><i class="ri-layout-masonry-fill"></i></span>
+      <span class="logo-text">WALL<span class="accent">VAULT</span></span>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <a href="#hero">Home</a>
+      <a href="#categories">Categories</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#about">About</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Dark mode toggle -->
+      <button class="icon-btn" id="themeToggle" title="Toggle theme">
+        <i class="ri-moon-fill" id="themeIcon"></i>
+      </button>
+      <button class="icon-btn" id="favToggle" title="Favorites">
+        <i class="ri-heart-3-line"></i>
+        <span class="badge" id="favBadge">0</span>
+      </button>
+      <button class="btn-primary" id="openUploadBtn">
+        <i class="ri-upload-2-line"></i> Upload
+      </button>
+      <!-- Hamburger -->
+      <button class="icon-btn hamburger" id="hamburger">
+        <i class="ri-menu-3-line"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==============================
+       HERO SECTION
+  ============================== -->
+  <section class="hero" id="hero">
+    <!-- Animated gradient orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="noise-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">✦ Over 500+ Premium Wallpapers</div>
+      <h1 class="hero-title">
+        Find Your Perfect<br />
+        <span class="gradient-text">Visual Escape</span>
+      </h1>
+      <p class="hero-subtitle">
+        Discover breathtaking wallpapers curated for every mood, screen, and aesthetic. Download in ultra-high resolution — completely free.
+      </p>
+
+      <!-- Search bar -->
+      <div class="search-wrapper" id="searchWrapper">
+        <i class="ri-search-line search-icon"></i>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search wallpapers, categories, moods…"
+          autocomplete="off"
+        />
+        <button class="search-btn" id="searchBtn">Search</button>
+      </div>
+
+      <!-- Trending tags -->
+      <div class="trending-tags">
+        <span class="tag-label">Trending:</span>
+        <button class="tag" data-cat="Space">Space</button>
+        <button class="tag" data-cat="Anime">Anime</button>
+        <button class="tag" data-cat="Abstract">Abstract</button>
+        <button class="tag" data-cat="Nature">Nature</button>
+      </div>
+    </div>
+
+    <!-- Hero stats -->
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">500+</span>
+        <span class="stat-label">Wallpapers</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">12</span>
+        <span class="stat-label">Categories</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">4K</span>
+        <span class="stat-label">Resolution</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       CATEGORIES SECTION
+  ============================== -->
+  <section class="categories-section" id="categories">
+    <div class="section-header">
+      <p class="section-eyebrow">Browse by</p>
+      <h2 class="section-title">Categories</h2>
+    </div>
+
+    <div class="categories-grid" id="categoriesGrid">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- ==============================
+       GALLERY SECTION
+  ============================== -->
+  <section class="gallery-section" id="gallery">
+    <div class="section-header">
+      <p class="section-eyebrow">Explore</p>
+      <h2 class="section-title">Wallpaper Gallery</h2>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-tab active" data-filter="All">All</button>
+        <button class="filter-tab" data-filter="Nature">Nature</button>
+        <button class="filter-tab" data-filter="Anime">Anime</button>
+        <button class="filter-tab" data-filter="Cars">Cars</button>
+        <button class="filter-tab" data-filter="Gaming">Gaming</button>
+        <button class="filter-tab" data-filter="Space">Space</button>
+        <button class="filter-tab" data-filter="Abstract">Abstract</button>
+        <button class="filter-tab" data-filter="Architecture">Architecture</button>
+        <button class="filter-tab" data-filter="Minimal">Minimal</button>
+      </div>
+      <div class="sort-select-wrapper">
+        <i class="ri-sort-desc"></i>
+        <select id="sortSelect">
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="liked">Most Liked</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Wallpaper grid -->
+    <div class="wallpaper-grid" id="wallpaperGrid">
+      <!-- Cards rendered by JS -->
+    </div>
+
+    <!-- No results state -->
+    <div class="no-results hidden" id="noResults">
+      <i class="ri-image-2-line"></i>
+      <p>No wallpapers found. Try a different search or category.</p>
+    </div>
+
+    <!-- Load more -->
+    <div class="load-more-wrapper">
+      <button class="btn-outline" id="loadMoreBtn">Load More <i class="ri-arrow-down-line"></i></button>
+    </div>
+  </section>
+
+  <!-- ==============================
+       ABOUT / FOOTER CTA
+  ============================== -->
+  <section class="about-section" id="about">
+    <div class="about-orb"></div>
+    <div class="about-content">
+      <p class="section-eyebrow">About WallVault</p>
+      <h2>Built for visual <span class="gradient-text">perfectionists</span></h2>
+      <p class="about-body">WallVault is a community-powered wallpaper platform. Upload your creations, curate your favorites, and dress every screen in art that truly speaks to you.</p>
+      <button class="btn-primary large" id="aboutUploadBtn">
+        <i class="ri-upload-cloud-2-line"></i> Start Uploading
+      </button>
+    </div>
+  </section>
+
+  <!-- ==============================
+       FOOTER
+  ============================== -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="logo-text">WALL<span class="accent">VAULT</span></span>
+        <p>The world's finest free wallpaper community.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <a href="#gallery">Gallery</a>
+          <a href="#categories">Categories</a>
+          <a href="#hero">Trending</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+      <div class="footer-social">
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          <a href="#" class="social-icon" title="Twitter/X"><i class="ri-twitter-x-fill"></i></a>
+          <a href="#" class="social-icon" title="Instagram"><i class="ri-instagram-fill"></i></a>
+          <a href="#" class="social-icon" title="Discord"><i class="ri-discord-fill"></i></a>
+          <a href="#" class="social-icon" title="GitHub"><i class="ri-github-fill"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 WallVault. Made with <i class="ri-heart-fill" style="color:var(--accent)"></i> for wallpaper lovers.</p>
+    </div>
+  </footer>
+
+  <!-- ==============================
+       FLOATING ACTION BUTTON
+  ============================== -->
+  <button class="fab" id="fab" title="Upload Wallpaper">
+    <i class="ri-add-line"></i>
+  </button>
+
+  <!-- ==============================
+       UPLOAD / EDIT MODAL
+  ============================== -->
+  <div class="modal-overlay hidden" id="uploadModal">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Upload Wallpaper</h3>
+        <button class="icon-btn close-btn" id="closeUploadModal"><i class="ri-close-line"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="upload-zone" id="uploadZone">
+          <i class="ri-image-add-line"></i>
+          <p>Drag & drop an image or <span class="accent-link">browse</span></p>
+          <input type="file" id="fileInput" accept="image/*" hidden />
+          <div class="upload-preview hidden" id="uploadPreview">
+            <img id="previewImg" src="" alt="Preview" />
+            <button class="remove-preview" id="removePreview"><i class="ri-close-circle-fill"></i></button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Title <span>*</span></label>
+          <input type="text" id="wallpaperTitle" placeholder="e.g. Neon City at Midnight" />
+        </div>
+        <div class="form-group">
+          <label>Category <span>*</span></label>
+          <select id="wallpaperCategory">
+            <option value="">Select a category</option>
+            <option value="Nature">Nature</option>
+            <option value="Anime">Anime</option>
+            <option value="Cars">Cars</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Space">Space</option>
+            <option value="Abstract">Abstract</option>
+            <option value="Architecture">Architecture</option>
+            <option value="Minimal">Minimal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tags (comma separated)</label>
+          <input type="text" id="wallpaperTags" placeholder="e.g. dark, neon, cyberpunk" />
+        </div>
+        <!-- Hidden field for edit ID -->
+        <input type="hidden" id="editId" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelUpload">Cancel</button>
+        <button class="btn-primary" id="saveWallpaper">
+          <i class="ri-save-line"></i> Save Wallpaper
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       PREVIEW MODAL
+  ============================== -->
+  <div class="modal-overlay hidden" id="previewModal">
+    <div class="preview-modal glass-card">
+      <button class="icon-btn close-btn preview-close" id="closePreviewModal"><i class="ri-close-line"></i></button>
+      <button class="preview-nav prev-btn" id="prevWallpaper"><i class="ri-arrow-left-s-line"></i></button>
+      <button class="preview-nav next-btn" id="nextWallpaper"><i class="ri-arrow-right-s-line"></i></button>
+
+      <div class="preview-image-wrap">
+        <img id="previewFullImg" src="" alt="" />
+        <div class="preview-loader" id="previewLoader"><span></span></div>
+      </div>
+      <div class="preview-info">
+        <div class="preview-meta">
+          <div>
+            <h3 id="previewTitle">Wallpaper Title</h3>
+            <p id="previewCategory" class="preview-cat-badge"></p>
+          </div>
+          <div class="preview-actions">
+            <button class="icon-btn like-btn-preview" id="previewLike" title="Like">
+              <i class="ri-heart-3-line"></i>
+            </button>
+            <a class="btn-primary" id="previewDownload" href="#" download>
+              <i class="ri-download-2-line"></i> Download
+            </a>
+          </div>
+        </div>
+        <div class="preview-tags" id="previewTags"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       FAVORITES DRAWER
+  ============================== -->
+  <div class="drawer-overlay hidden" id="drawerOverlay"></div>
+  <div class="favorites-drawer hidden" id="favDrawer">
+    <div class="drawer-header">
+      <h3><i class="ri-heart-3-fill"></i> Favorites</h3>
+      <button class="icon-btn" id="closeDrawer"><i class="ri-close-line"></i></button>
+    </div>
+    <div class="drawer-body" id="favList">
+      <!-- Fav items populated by JS -->
+    </div>
+  </div>
+
+  <!-- ==============================
+       TOAST NOTIFICATION
+  ============================== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+  /* ============================================================
+   WALLVAULT — script.js
+   Premium Wallpaper Web App
+   ============================================================ */
+
+/* ──────────────────────────────────────────────────────────
+   SEED DATA — default wallpapers shown on first load
+   Uses picsum.photos for realistic placeholder images
+   ────────────────────────────────────────────────────────── */
+const SEED_WALLPAPERS = [
+  { id: 's1',  title: 'Misty Mountain Peak',    category: 'Nature',       tags: ['mountain','fog','green'],       src: 'https://picsum.photos/seed/mtn1/800/500',     likes: 142, liked: false, createdAt: Date.now() - 9e8 },
+  { id: 's2',  title: 'Neon Tokyo Nights',       category: 'Anime',        tags: ['neon','city','night'],          src: 'https://picsum.photos/seed/anime2/800/500',   likes: 289, liked: false, createdAt: Date.now() - 8e8 },
+  { id: 's3',  title: 'Lamborghini in Rain',     category: 'Cars',         tags: ['supercar','rain','dark'],       src: 'https://picsum.photos/seed/car3/800/500',     likes: 204, liked: false, createdAt: Date.now() - 7e8 },
+  { id: 's4',  title: 'Cyberpunk 2099',          category: 'Gaming',       tags: ['cyberpunk','neon','scifi'],     src: 'https://picsum.photos/seed/game4/800/500',    likes: 317, liked: false, createdAt: Date.now() - 6e8 },
+  { id: 's5',  title: 'Milky Way Spiral',        category: 'Space',        tags: ['galaxy','stars','night'],       src: 'https://picsum.photos/seed/space5/800/500',   likes: 453, liked: false, createdAt: Date.now() - 5e8 },
+  { id: 's6',  title: 'Liquid Chrome Flow',      category: 'Abstract',     tags: ['chrome','fluid','silver'],      src: 'https://picsum.photos/seed/abs6/800/500',     likes: 178, liked: false, createdAt: Date.now() - 4e8 },
+  { id: 's7',  title: 'Glass Tower at Dusk',     category: 'Architecture', tags: ['glass','tower','city'],         src: 'https://picsum.photos/seed/arch7/800/500',    likes: 96,  liked: false, createdAt: Date.now() - 3.5e8 },
+  { id: 's8',  title: 'White Void Minimal',      category: 'Minimal',      tags: ['white','clean','simple'],       src: 'https://picsum.photos/seed/min8/800/500',     likes: 71,  liked: false, createdAt: Date.now() - 3e8 },
+  { id: 's9',  title: 'Enchanted Forest',        category: 'Nature',       tags: ['forest','green','light'],       src: 'https://picsum.photos/seed/forest9/800/500',  likes: 231, liked: false, createdAt: Date.now() - 2.5e8 },
+  { id: 's10', title: 'Oni Warrior',             category: 'Anime',        tags: ['warrior','dark','japan'],       src: 'https://picsum.photos/seed/oni10/800/500',    likes: 198, liked: false, createdAt: Date.now() - 2e8 },
+  { id: 's11', title: 'Ferrari Sunrise',         category: 'Cars',         tags: ['ferrari','red','sunrise'],      src: 'https://picsum.photos/seed/ferrari11/800/500',likes: 267, liked: false, createdAt: Date.now() - 1.5e8 },
+  { id: 's12', title: 'Black Hole Event',        category: 'Space',        tags: ['blackhole','event','cosmos'],   src: 'https://picsum.photos/seed/bh12/800/500',     likes: 512, liked: false, createdAt: Date.now() - 1e8 },
+  { id: 's13', title: 'Aurora Borealis',         category: 'Nature',       tags: ['aurora','night','green'],       src: 'https://picsum.photos/seed/aurora13/800/500', likes: 389, liked: false, createdAt: Date.now() - 8e7 },
+  { id: 's14', title: 'Polygon Art Storm',       category: 'Abstract',     tags: ['polygon','colorful','art'],     src: 'https://picsum.photos/seed/poly14/800/500',   likes: 143, liked: false, createdAt: Date.now() - 6e7 },
+  { id: 's15', title: 'Desert Arch',             category: 'Architecture', tags: ['desert','arch','sandstone'],    src: 'https://picsum.photos/seed/desert15/800/500', likes: 87,  liked: false, createdAt: Date.now() - 4e7 },
+  { id: 's16', title: 'Zen Garden',              category: 'Minimal',      tags: ['zen','calm','stones'],          src: 'https://picsum.photos/seed/zen16/800/500',    likes: 110, liked: false, createdAt: Date.now() - 2e7 },
+];
+
+/* Category metadata (icon + hero image) */
+const CATEGORY_META = [
+  { name:'Nature',       icon:'ri-plant-line',        seed:'nature-cat'   },
+  { name:'Anime',        icon:'ri-star-line',          seed:'anime-cat'    },
+  { name:'Cars',         icon:'ri-car-line',           seed:'cars-cat'     },
+  { name:'Gaming',       icon:'ri-gamepad-line',       seed:'gaming-cat'   },
+  { name:'Space',        icon:'ri-rocket-line',        seed:'space-cat'    },
+  { name:'Abstract',     icon:'ri-bubble-chart-line',  seed:'abstract-cat' },
+  { name:'Architecture', icon:'ri-building-4-line',    seed:'arch-cat'     },
+  { name:'Minimal',      icon:'ri-layout-2-line',      seed:'minimal-cat'  },
+];
+
+/* ──────────────────────────────────────────────────────────
+   APP STATE
+   ────────────────────────────────────────────────────────── */
+let state = {
+  wallpapers:     [],     // all wallpapers in memory
+  filtered:       [],     // currently displayed slice
+  activeFilter:   'All',
+  searchQuery:    '',
+  sortBy:         'newest',
+  currentPreviewId: null, // wallpaper open in preview modal
+  editingId:      null,   // wallpaper being edited
+  uploadDataUrl:  null,   // base64 of uploaded image
+  pageSize:       12,
+  page:           1,
+  isDark:         true,
+};
+
+/* ──────────────────────────────────────────────────────────
+   LOCALSTORAGE HELPERS
+   ────────────────────────────────────────────────────────── */
+const LS_KEY = 'wallvault_v2';
+
+function saveToStorage() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state.wallpapers)); } catch(e) {}
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return null;
+}
+
+/* ──────────────────────────────────────────────────────────
+   DOM REFERENCES
+   ────────────────────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+
+const els = {
+  navbar:         $('navbar'),
+  themeToggle:    $('themeToggle'),
+  themeIcon:      $('themeIcon'),
+  hamburger:      $('hamburger'),
+  navLinks:       $('navLinks'),
+  searchInput:    $('searchInput'),
+  searchBtn:      $('searchBtn'),
+  filterTabs:     $('filterTabs'),
+  sortSelect:     $('sortSelect'),
+  wallpaperGrid:  $('wallpaperGrid'),
+  categoriesGrid: $('categoriesGrid'),
+  noResults:      $('noResults'),
+  loadMoreBtn:    $('loadMoreBtn'),
+  fab:            $('fab'),
+  uploadModal:    $('uploadModal'),
+  closeUploadModal: $('closeUploadModal'),
+  cancelUpload:   $('cancelUpload'),
+  saveWallpaper:  $('saveWallpaper'),
+  modalTitle:     $('modalTitle'),
+  uploadZone:     $('uploadZone'),
+  fileInput:      $('fileInput'),
+  uploadPreview:  $('uploadPreview'),
+  previewImg:     $('previewImg'),
+  removePreview:  $('removePreview'),
+  wallpaperTitle: $('wallpaperTitle'),
+  wallpaperCategory: $('wallpaperCategory'),
+  wallpaperTags:  $('wallpaperTags'),
+  editId:         $('editId'),
+  previewModal:   $('previewModal'),
+  closePreviewModal: $('closePreviewModal'),
+  previewFullImg: $('previewFullImg'),
+  previewLoader:  $('previewLoader'),
+  previewTitle:   $('previewTitle'),
+  previewCategory:$('previewCategory'),
+  previewTags:    $('previewTags'),
+  previewDownload:$('previewDownload'),
+  previewLike:    $('previewLike'),
+  prevWallpaper:  $('prevWallpaper'),
+  nextWallpaper:  $('nextWallpaper'),
+  favToggle:      $('favToggle'),
+  favBadge:       $('favBadge'),
+  favDrawer:      $('favDrawer'),
+  drawerOverlay:  $('drawerOverlay'),
+  closeDrawer:    $('closeDrawer'),
+  favList:        $('favList'),
+  toastContainer: $('toastContainer'),
+  openUploadBtn:  $('openUploadBtn'),
+  aboutUploadBtn: $('aboutUploadBtn'),
+};
+
+/* ──────────────────────────────────────────────────────────
+   TOAST NOTIFICATIONS
+   ────────────────────────────────────────────────────────── */
+function showToast(message, type = 'info') {
+  const icons = { success:'ri-checkbox-circle-fill', error:'ri-error-warning-fill', info:'ri-information-fill' };
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<i class="${icons[type]}"></i> ${message}`;
+  els.toastContainer.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+/* ──────────────────────────────────────────────────────────
+   THEME TOGGLE
+   ────────────────────────────────────────────────────────── */
+function applyTheme(isDark) {
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  els.themeIcon.className = isDark ? 'ri-moon-fill' : 'ri-sun-fill';
+  state.isDark = isDark;
+  localStorage.setItem('wallvault_theme', isDark ? 'dark' : 'light');
+}
+
+els.themeToggle.addEventListener('click', () => applyTheme(!state.isDark));
+
+/* ──────────────────────────────────────────────────────────
+   NAVBAR SCROLL + HAMBURGER
+   ────────────────────────────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  els.navbar.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+els.hamburger.addEventListener('click', () => {
+  els.navLinks.classList.toggle('open');
+});
+
+// Close mobile menu on nav link click
+els.navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => els.navLinks.classList.remove('open'));
+});
+
+/* ──────────────────────────────────────────────────────────
+   CATEGORIES RENDER
+   ────────────────────────────────────────────────────────── */
+function renderCategories() {
+  els.categoriesGrid.innerHTML = CATEGORY_META.map(cat => {
+    const count = state.wallpapers.filter(w => w.category === cat.name).length;
+    return `
+      <div class="category-card" data-cat="${cat.name}" title="${cat.name}">
+        <img
+          src="https://picsum.photos/seed/${cat.seed}/400/300"
+          alt="${cat.name}"
+          loading="lazy"
+        />
+        <div class="category-overlay">
+          <i class="${cat.icon}" style="font-size:1.4rem;color:#fff;margin-bottom:4px;"></i>
+          <span class="category-name">${cat.name}</span>
+          <span class="category-count">${count} wallpaper${count !== 1 ? 's' : ''}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Click to filter gallery
+  els.categoriesGrid.querySelectorAll('.category-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const cat = card.dataset.cat;
+      state.activeFilter = cat;
+      state.page = 1;
+      applyFilters();
+      updateFilterTabsUI();
+      document.querySelector('#gallery').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
+
+/* ──────────────────────────────────────────────────────────
+   FILTER, SORT & SEARCH LOGIC
+   ────────────────────────────────────────────────────────── */
+function applyFilters() {
+  let list = [...state.wallpapers];
+
+  // Category filter
+  if (state.activeFilter !== 'All') {
+    list = list.filter(w => w.category === state.activeFilter);
+  }
+
+  // Search query
+  if (state.searchQuery) {
+    const q = state.searchQuery.toLowerCase();
+    list = list.filter(w =>
+      w.title.toLowerCase().includes(q) ||
+      w.category.toLowerCase().includes(q) ||
+      (w.tags || []).some(t => t.toLowerCase().includes(q))
+    );
+  }
+
+  // Sort
+  if (state.sortBy === 'newest')  list.sort((a, b) => b.createdAt - a.createdAt);
+  if (state.sortBy === 'oldest')  list.sort((a, b) => a.createdAt - b.createdAt);
+  if (state.sortBy === 'liked')   list.sort((a, b) => b.likes - a.likes);
+
+  state.filtered = list;
+  renderGallery();
+}
+
+function updateFilterTabsUI() {
+  els.filterTabs.querySelectorAll('.filter-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === state.activeFilter);
+  });
+}
+
+/* ──────────────────────────────────────────────────────────
+   GALLERY RENDER
+   ────────────────────────────────────────────────────────── */
+function renderGallery(reset = true) {
+  if (reset) {
+    els.wallpaperGrid.innerHTML = '';
+    state.page = 1;
+  }
+
+  const slice = state.filtered.slice(0, state.page * state.pageSize);
+  const hasMore = slice.length < state.filtered.length;
+
+  els.noResults.classList.toggle('hidden', state.filtered.length > 0);
+  els.loadMoreBtn.parentElement.classList.toggle('hidden', !hasMore);
+
+  // Show skeletons briefly for UX
+  if (reset) {
+    showSkeletons(6);
+    setTimeout(() => {
+      els.wallpaperGrid.innerHTML = '';
+      slice.forEach((w, i) => appendCard(w, i));
+    }, 400);
+  } else {
+    slice.slice((state.page - 1) * state.pageSize).forEach((w, i) => appendCard(w, i));
+  }
+}
+
+function showSkeletons(n) {
+  els.wallpaperGrid.innerHTML = Array(n).fill(
+    `<div class="skeleton skeleton-card"></div>`
+  ).join('');
+}
+
+function appendCard(w, index) {
+  const card = document.createElement('div');
+  card.className = 'wallpaper-card';
+  card.dataset.id = w.id;
+  card.style.animationDelay = `${(index % state.pageSize) * 0.05}s`;
+  card.innerHTML = `
+    <div class="card-image-wrap">
+      <img src="${w.src}" alt="${w.title}" loading="lazy" />
+      <span class="card-cat-badge">${w.category}</span>
+      <div class="card-overlay">
+        <button class="overlay-btn preview-trigger" title="Preview"><i class="ri-eye-line"></i></button>
+        <button class="overlay-btn like-overlay ${w.liked ? 'liked' : ''}" title="Like">
+          <i class="${w.liked ? 'ri-heart-fill' : 'ri-heart-line'}"></i>
+        </button>
+        <a class="overlay-btn" href="${w.src}" download="${w.title}" title="Download">
+          <i class="ri-download-2-line"></i>
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">${w.title}</div>
+      <div class="card-footer">
+        <span class="card-likes">
+          <i class="ri-heart-fill"></i> ${w.likes.toLocaleString()}
+        </span>
+        <div class="card-actions-row">
+          <button class="card-action-btn edit-btn" title="Edit"><i class="ri-edit-2-line"></i></button>
+          <button class="card-action-btn del del-btn" title="Delete"><i class="ri-delete-bin-6-line"></i></button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Preview (click image area or eye button)
+  card.querySelector('.preview-trigger').addEventListener('click', e => {
+    e.stopPropagation();
+    openPreview(w.id);
+  });
+  card.querySelector('.card-image-wrap img').addEventListener('click', () => openPreview(w.id));
+
+  // Like toggle
+  card.querySelector('.like-overlay').addEventListener('click', e => {
+    e.stopPropagation();
+    toggleLike(w.id);
+  });
+
+  // Edit
+  card.querySelector('.edit-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    openEditModal(w.id);
+  });
+
+  // Delete
+  card.querySelector('.del-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    deleteWallpaper(w.id);
+  });
+
+  els.wallpaperGrid.appendChild(card);
+}
+
+/* ──────────────────────────────────────────────────────────
+   LIKE TOGGLE
+   ────────────────────────────────────────────────────────── */
+function toggleLike(id) {
+  const w = state.wallpapers.find(x => x.id === id);
+  if (!w) return;
+  w.liked = !w.liked;
+  w.likes += w.liked ? 1 : -1;
+  saveToStorage();
+  applyFilters();
+  updateFavBadge();
+  renderFavDrawer();
+  showToast(w.liked ? '❤️ Added to favorites!' : 'Removed from favorites', w.liked ? 'success' : 'info');
+}
+
+/* ──────────────────────────────────────────────────────────
+   PREVIEW MODAL
+   ────────────────────────────────────────────────────────── */
+function openPreview(id) {
+  state.currentPreviewId = id;
+  const w = state.wallpapers.find(x => x.id === id);
+  if (!w) return;
+
+  // Show loader while image loads
+  els.previewLoader.style.display = 'flex';
+  els.previewFullImg.style.opacity = '0';
+
+  els.previewModal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+
+  els.previewTitle.textContent = w.title;
+  els.previewCategory.textContent = w.category;
+  els.previewDownload.href = w.src;
+  els.previewDownload.download = w.title;
+
+  // Tags
+  els.previewTags.innerHTML = (w.tags || []).map(t =>
+    `<span class="preview-tag">#${t}</span>`
+  ).join('');
+
+  // Like button state
+  updatePreviewLikeBtn(w);
+
+  // Load image
+  const img = new Image();
+  img.onload = () => {
+    els.previewFullImg.src = w.src;
+    els.previewFullImg.style.opacity = '1';
+    els.previewLoader.style.display = 'none';
+  };
+  img.src = w.src;
+}
+
+function updatePreviewLikeBtn(w) {
+  if (!w) return;
+  els.previewLike.classList.toggle('liked', w.liked);
+  els.previewLike.innerHTML = `<i class="${w.liked ? 'ri-heart-fill' : 'ri-heart-3-line'}"></i>`;
+}
+
+function closePreview() {
+  els.previewModal.classList.add('hidden');
+  document.body.style.overflow = '';
+  state.currentPreviewId = null;
+}
+
+// Navigate through filtered wallpapers in preview
+function navigatePreview(dir) {
+  const ids = state.filtered.map(w => w.id);
+  const idx = ids.indexOf(state.currentPreviewId);
+  if (idx === -1) return;
+  const next = (idx + dir + ids.length) % ids.length;
+  openPreview(ids[next]);
+}
+
+els.closePreviewModal.addEventListener('click', closePreview);
+els.prevWallpaper.addEventListener('click', () => navigatePreview(-1));
+els.nextWallpaper.addEventListener('click', () => navigatePreview(1));
+
+// Like from preview
+els.previewLike.addEventListener('click', () => {
+  if (!state.currentPreviewId) return;
+  toggleLike(state.currentPreviewId);
+  const w = state.wallpapers.find(x => x.id === state.currentPreviewId);
+  updatePreviewLikeBtn(w);
+});
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (!state.currentPreviewId) return;
+  if (e.key === 'Escape') closePreview();
+  if (e.key === 'ArrowLeft')  navigatePreview(-1);
+  if (e.key === 'ArrowRight') navigatePreview(1);
+});
+
+// Click backdrop to close preview
+els.previewModal.addEventListener('click', e => {
+  if (e.target === els.previewModal) closePreview();
+});
+
+/* ──────────────────────────────────────────────────────────
+   UPLOAD MODAL (CREATE)
+   ────────────────────────────────────────────────────────── */
+function openUploadModal() {
+  state.editingId = null;
+  state.uploadDataUrl = null;
+  els.modalTitle.textContent = 'Upload Wallpaper';
+  els.wallpaperTitle.value = '';
+  els.wallpaperCategory.value = '';
+  els.wallpaperTags.value = '';
+  els.editId.value = '';
+  els.uploadPreview.classList.add('hidden');
+  els.uploadZone.querySelector('i').style.display = '';
+  els.uploadZone.querySelector('p').style.display = '';
+  els.uploadModal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function openEditModal(id) {
+  const w = state.wallpapers.find(x => x.id === id);
+  if (!w) return;
+  state.editingId = id;
+  state.uploadDataUrl = w.src;
+  els.modalTitle.textContent = 'Edit Wallpaper';
+  els.wallpaperTitle.value = w.title;
+  els.wallpaperCategory.value = w.category;
+  els.wallpaperTags.value = (w.tags || []).join(', ');
+  els.editId.value = id;
+  // Show existing image
+  els.previewImg.src = w.src;
+  els.uploadPreview.classList.remove('hidden');
+  els.uploadZone.querySelector('i').style.display = 'none';
+  els.uploadZone.querySelector('p').style.display = 'none';
+  els.uploadModal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeUploadModal() {
+  els.uploadModal.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+[els.openUploadBtn, els.fab, els.aboutUploadBtn].forEach(btn =>
+  btn.addEventListener('click', openUploadModal)
+);
+els.closeUploadModal.addEventListener('click', closeUploadModal);
+els.cancelUpload.addEventListener('click', closeUploadModal);
+els.uploadModal.addEventListener('click', e => {
+  if (e.target === els.uploadModal) closeUploadModal();
+});
+
+/* ── File drag & drop + browse ── */
+els.uploadZone.addEventListener('click', () => els.fileInput.click());
+
+els.uploadZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  els.uploadZone.style.borderColor = 'var(--accent)';
+});
+els.uploadZone.addEventListener('dragleave', () => {
+  els.uploadZone.style.borderColor = '';
+});
+els.uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  els.uploadZone.style.borderColor = '';
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) handleFileSelected(file);
+});
+
+els.fileInput.addEventListener('change', () => {
+  if (els.fileInput.files[0]) handleFileSelected(els.fileInput.files[0]);
+});
+
+function handleFileSelected(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.uploadDataUrl = e.target.result;
+    els.previewImg.src = e.target.result;
+    els.uploadPreview.classList.remove('hidden');
+    els.uploadZone.querySelector('i').style.display = 'none';
+    els.uploadZone.querySelector('p').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+els.removePreview.addEventListener('click', e => {
+  e.stopPropagation();
+  state.uploadDataUrl = null;
+  els.uploadPreview.classList.add('hidden');
+  els.uploadZone.querySelector('i').style.display = '';
+  els.uploadZone.querySelector('p').style.display = '';
+  els.fileInput.value = '';
+});
+
+/* ──────────────────────────────────────────────────────────
+   SAVE WALLPAPER (CREATE + UPDATE)
+   ────────────────────────────────────────────────────────── */
+els.saveWallpaper.addEventListener('click', () => {
+  const title    = els.wallpaperTitle.value.trim();
+  const category = els.wallpaperCategory.value;
+  const tagsRaw  = els.wallpaperTags.value.trim();
+  const tags     = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
+  const editId   = els.editId.value;
+
+  if (!title) { showToast('Please enter a wallpaper title.', 'error'); return; }
+  if (!category) { showToast('Please select a category.', 'error'); return; }
+
+  if (editId) {
+    // UPDATE
+    const w = state.wallpapers.find(x => x.id === editId);
+    if (w) {
+      w.title    = title;
+      w.category = category;
+      w.tags     = tags;
+      if (state.uploadDataUrl && state.uploadDataUrl !== w.src) {
+        w.src = state.uploadDataUrl;
+      }
+      showToast('Wallpaper updated!', 'success');
+    }
+  } else {
+    // CREATE
+    if (!state.uploadDataUrl) {
+      showToast('Please upload an image.', 'error');
+      return;
+    }
+    const newW = {
+      id:        'u' + Date.now(),
+      title,
+      category,
+      tags,
+      src:       state.uploadDataUrl,
+      likes:     0,
+      liked:     false,
+      createdAt: Date.now(),
+    };
+    state.wallpapers.unshift(newW);
+    showToast('Wallpaper uploaded! 🎉', 'success');
+  }
+
+  saveToStorage();
+  applyFilters();
+  renderCategories();
+  closeUploadModal();
+});
+
+/* ──────────────────────────────────────────────────────────
+   DELETE WALLPAPER
+   ────────────────────────────────────────────────────────── */
+function deleteWallpaper(id) {
+  if (!confirm('Delete this wallpaper? This cannot be undone.')) return;
+  state.wallpapers = state.wallpapers.filter(w => w.id !== id);
+  saveToStorage();
+  applyFilters();
+  renderCategories();
+  updateFavBadge();
+  renderFavDrawer();
+  showToast('Wallpaper deleted.', 'info');
+}
+
+/* ──────────────────────────────────────────────────────────
+   FAVORITES DRAWER
+   ────────────────────────────────────────────────────────── */
+function updateFavBadge() {
+  const count = state.wallpapers.filter(w => w.liked).length;
+  els.favBadge.textContent = count;
+  els.favBadge.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function renderFavDrawer() {
+  const favs = state.wallpapers.filter(w => w.liked);
+  if (favs.length === 0) {
+    els.favList.innerHTML = `
+      <div class="fav-empty">
+        <i class="ri-heart-3-line"></i>
+        No favorites yet. Heart a wallpaper to save it here.
+      </div>
+    `;
+    return;
+  }
+  els.favList.innerHTML = favs.map(w => `
+    <div class="fav-item" data-id="${w.id}">
+      <img src="${w.src}" alt="${w.title}" />
+      <div class="fav-item-info">
+        <div class="fav-item-title">${w.title}</div>
+        <div class="fav-item-cat">${w.category}</div>
+      </div>
+      <button class="fav-remove" data-id="${w.id}" title="Remove"><i class="ri-close-line"></i></button>
+    </div>
+  `).join('');
+
+  // Open preview on row click
+  els.favList.querySelectorAll('.fav-item').forEach(item => {
+    item.addEventListener('click', e => {
+      if (e.target.closest('.fav-remove')) return;
+      openPreview(item.dataset.id);
+    });
+  });
+
+  // Remove fav on X click
+  els.favList.querySelectorAll('.fav-remove').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleLike(btn.dataset.id);
+    });
+  });
+}
+
+function openFavDrawer() {
+  renderFavDrawer();
+  els.favDrawer.classList.remove('hidden');
+  els.drawerOverlay.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeFavDrawer() {
+  els.favDrawer.classList.add('hidden');
+  els.drawerOverlay.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+els.favToggle.addEventListener('click', openFavDrawer);
+els.closeDrawer.addEventListener('click', closeFavDrawer);
+els.drawerOverlay.addEventListener('click', closeFavDrawer);
+
+/* ──────────────────────────────────────────────────────────
+   FILTER TABS
+   ────────────────────────────────────────────────────────── */
+els.filterTabs.querySelectorAll('.filter-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.activeFilter = btn.dataset.filter;
+    state.page = 1;
+    updateFilterTabsUI();
+    applyFilters();
+  });
+});
+
+/* ──────────────────────────────────────────────────────────
+   SEARCH
+   ────────────────────────────────────────────────────────── */
+function triggerSearch() {
+  state.searchQuery = els.searchInput.value.trim();
+  state.page = 1;
+  applyFilters();
+  document.querySelector('#gallery').scrollIntoView({ behavior: 'smooth' });
+}
+els.searchBtn.addEventListener('click', triggerSearch);
+els.searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') triggerSearch();
+});
+
+// Trending tags
+document.querySelectorAll('.tag').forEach(tag => {
+  tag.addEventListener('click', () => {
+    state.activeFilter = tag.dataset.cat;
+    state.searchQuery = '';
+    els.searchInput.value = '';
+    state.page = 1;
+    updateFilterTabsUI();
+    applyFilters();
+    document.querySelector('#gallery').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+/* ──────────────────────────────────────────────────────────
+   SORT
+   ────────────────────────────────────────────────────────── */
+els.sortSelect.addEventListener('change', () => {
+  state.sortBy = els.sortSelect.value;
+  state.page = 1;
+  applyFilters();
+});
+
+/* ──────────────────────────────────────────────────────────
+   LOAD MORE
+   ────────────────────────────────────────────────────────── */
+els.loadMoreBtn.addEventListener('click', () => {
+  state.page++;
+  renderGallery(false);
+});
+
+/* ──────────────────────────────────────────────────────────
+   INIT
+   ────────────────────────────────────────────────────────── */
+function init() {
+  // Load saved theme
+  const savedTheme = localStorage.getItem('wallvault_theme');
+  if (savedTheme) applyTheme(savedTheme === 'dark');
+
+  // Load wallpapers (from localStorage or seed)
+  const stored = loadFromStorage();
+  state.wallpapers = stored && stored.length > 0 ? stored : SEED_WALLPAPERS;
+
+  // Render everything
+  renderCategories();
+  applyFilters();
+  updateFavBadge();
+
+  // Hide fav badge if 0
+  const favCount = state.wallpapers.filter(w => w.liked).length;
+  els.favBadge.style.display = favCount > 0 ? 'flex' : 'none';
+}
+
+init();
+
+  </script>
+</body>
+</html>
+
